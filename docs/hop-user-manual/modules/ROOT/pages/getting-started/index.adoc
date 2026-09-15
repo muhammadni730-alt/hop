@@ -1,40 +1,2888 @@
-////
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-  http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
-////
-[[GettingStarted]]
-:imagesdir: ../../assets/images
-:page-pagination:
-:page-pagination-no-back:
-:description: The Apache Hop Getting Started guide walks new Hop users through the Hop concepts and the bare necessities to get started building workflows and pipelines.
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>PRIVEX — Private Conversations. Your Control.</title>
+  <meta name="description" content="Private, simple, and secure messaging without requiring a phone number." />
+  <meta name="theme-color" content="#0c0e14" />
 
-= Getting Started
+  <style>
+    /* ==========================================================================
+       PRIVEX DESIGN SYSTEM — CSS Custom Properties & Reset
+       ========================================================================== */
+    :root {
+      --bg-base: #0c0e14;
+      --bg-surface: #141720;
+      --bg-elevated: #1c202c;
+      --bg-input: #232838;
+      --border-subtle: #242938;
+      --border-focus: #00e5a3;
 
-This guide walks you through the Hop basics.
+      --text-primary: #f2f5f8;
+      --text-secondary: #8e98aa;
+      --text-muted: #5e6678;
+      --text-inverse: #0c0e14;
 
-We'll focus on the core knowledge you need to move around in Hop, without going in detail.
-At the end of this guide, there will be links to dive deeper into various Hop topics.
+      --accent: #00e5a3;
+      --accent-hover: #00c78e;
+      --accent-glow: rgba(0, 229, 163, 0.15);
+      --accent-dim: rgba(0, 229, 163, 0.08);
 
-This is what we'll cover:
+      --danger: #ff4d6d;
+      --danger-dim: rgba(255, 77, 109, 0.12);
+      --warning: #ffb703;
+      --info: #3a86ff;
+      --bubble-in: #1a1e2a;
+      --bubble-out: #0f3d32;
 
-* xref:getting-started/hop-what-is-hop.adoc[What is Hop?]
-* xref:getting-started/hop-concepts.adoc[Concepts]
-* xref:getting-started/hop-download-install.adoc[Download & Install]
-* xref:getting-started/hop-tools.adoc[Tools]
-* xref:getting-started/hop-gui.adoc[Hop Gui overview]
-* xref:getting-started/hop-gui-pipelines.adoc[Pipelines]
-* xref:getting-started/hop-gui-workflows.adoc[Workflows]
-* xref:getting-started/hop-next-steps.adoc[Next Steps]
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
 
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --transition-fast: 0.15s ease;
+      --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f4f6f9;
+      --bg-surface: #ffffff;
+      --bg-elevated: #ebf0f5;
+      --bg-input: #dfe5ec;
+      --border-subtle: #d3dbe4;
+      --border-focus: #00a877;
+
+      --text-primary: #12151c;
+      --text-secondary: #566171;
+      --text-muted: #8893a4;
+      --text-inverse: #ffffff;
+
+      --accent: #00a877;
+      --accent-hover: #008f65;
+      --accent-glow: rgba(0, 168, 119, 0.15);
+      --accent-dim: rgba(0, 168, 119, 0.1);
+
+      --danger: #e63946;
+      --danger-dim: rgba(230, 57, 70, 0.1);
+      --bubble-in: #e6ecf2;
+      --bubble-out: #d2f2e7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-stack);
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    button, input, textarea, select {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ==========================================================================
+       TOP STATUS & PROTOYPE HONESTY BANNER
+       ========================================================================== */
+    .prototype-banner {
+      background: linear-gradient(90deg, #1b202e, #131722);
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+    .prototype-badge {
+      background: rgba(255, 183, 3, 0.15);
+      color: var(--warning);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-right: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ==========================================================================
+       MAIN APP SHELL
+       ========================================================================== */
+    .app-shell {
+      display: flex;
+      flex: 1;
+      height: calc(100% - 32px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Left Nav / Action Rail */
+    .nav-rail {
+      width: 72px;
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      gap: 16px;
+      z-index: 30;
+      flex-shrink: 0;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      background: var(--accent-dim);
+      border: 1px solid var(--border-focus);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .rail-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      position: relative;
+      transition: var(--transition-fast);
+    }
+    .rail-btn:hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+    .rail-btn.active {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(0, 229, 163, 0.3);
+    }
+    .rail-btn .badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .nav-spacer { flex: 1; }
+
+    /* Secondary Sidebar: Chats & Directories */
+    .sidebar-pane {
+      width: 340px;
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      z-index: 25;
+    }
+
+    .sidebar-header {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .sidebar-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .sidebar-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+    }
+    .icon-btn:hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+
+    /* Filter Tabs & Search Bar */
+    .sidebar-filter-box {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .search-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .search-input-wrapper svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 9px 12px 9px 38px;
+      font-size: 13.5px;
+      outline: none;
+      transition: var(--transition-fast);
+    }
+    .search-input:focus {
+      border-color: var(--border-focus);
+      background: var(--bg-surface);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+    .filter-pill {
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: var(--radius-full);
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+    .filter-pill.active {
+      background: var(--text-primary);
+      color: var(--text-inverse);
+    }
+
+    /* Chat List */
+    .chat-list-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .chat-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition-fast);
+    }
+    .chat-row:hover { background: var(--bg-elevated); }
+    .chat-row.active {
+      background: var(--bg-elevated);
+      border-left: 3px solid var(--accent);
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg-input);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      overflow: hidden;
+      user-select: none;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .status-dot {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border: 2px solid var(--bg-surface);
+      border-radius: 50%;
+    }
+    .status-dot.offline { background: var(--text-muted); }
+
+    .chat-row-meta {
+      flex: 1;
+      min-width: 0;
+    }
+    .chat-row-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+    .chat-row-name {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .badge-verified {
+      color: var(--accent);
+      display: inline-flex;
+    }
+    .badge-lock {
+      color: var(--text-muted);
+      display: inline-flex;
+    }
+    .chat-row-time {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .chat-row-preview {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .unread-badge {
+      background: var(--accent);
+      color: var(--text-inverse);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      margin-left: 6px;
+    }
+
+    /* Main Center Workspace / Active Conversation */
+    .chat-workspace {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-base);
+      position: relative;
+      min-width: 0;
+    }
+
+    .conversation-header {
+      height: 64px;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+    .chat-active-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .chat-header-names {
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-header-title {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chat-header-sub {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .e2ee-tag {
+      background: var(--accent-dim);
+      color: var(--accent);
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .chat-header-tools {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Message Stage & Feed */
+    .message-stage {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background-image: radial-gradient(var(--border-subtle) 1px, transparent 1px);
+      background-size: 32px 32px;
+      background-position: center;
+    }
+
+    .system-notice {
+      align-self: center;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 6px 16px;
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      text-align: center;
+      max-width: 80%;
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .message-cluster {
+      display: flex;
+      flex-direction: column;
+      max-width: 68%;
+    }
+    .message-cluster.incoming {
+      align-self: flex-start;
+    }
+    .message-cluster.outgoing {
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+
+    .msg-sender-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+      margin-left: 8px;
+    }
+
+    .msg-bubble {
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.45;
+      position: relative;
+      word-break: break-word;
+      border: 1px solid transparent;
+      transition: box-shadow var(--transition-fast);
+    }
+    .incoming .msg-bubble {
+      background: var(--bubble-in);
+      border-color: var(--border-subtle);
+      border-bottom-left-radius: 4px;
+      color: var(--text-primary);
+    }
+    .outgoing .msg-bubble {
+      background: var(--bubble-out);
+      border-color: rgba(0, 229, 163, 0.25);
+      border-bottom-right-radius: 4px;
+      color: #e6faf4;
+    }
+    [data-theme="light"] .outgoing .msg-bubble {
+      color: #0b2e23;
+    }
+
+    .msg-bubble.pinned {
+      border: 1px solid var(--accent);
+    }
+
+    .msg-media-img {
+      max-width: 100%;
+      max-height: 280px;
+      border-radius: 10px;
+      margin-top: 6px;
+      display: block;
+      cursor: pointer;
+    }
+
+    .msg-voice-note {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 0;
+      min-width: 200px;
+    }
+    .voice-play-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--text-inverse);
+    }
+    .voice-wave {
+      flex: 1;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .wave-bar {
+      flex: 1;
+      background: var(--text-muted);
+      border-radius: 2px;
+      min-height: 4px;
+    }
+    .wave-bar.active { background: var(--accent); }
+
+    .msg-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      user-select: none;
+    }
+    .outgoing .msg-footer { color: rgba(255, 255, 255, 0.6); }
+    [data-theme="light"] .outgoing .msg-footer { color: rgba(0, 0, 0, 0.5); }
+
+    .msg-status-icon {
+      display: inline-flex;
+      font-size: 12px;
+    }
+
+    .msg-actions-hover {
+      position: absolute;
+      top: -12px;
+      right: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 2px 6px;
+      display: none;
+      gap: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+    .msg-bubble:hover .msg-actions-hover {
+      display: flex;
+    }
+    .mini-action-btn {
+      width: 22px;
+      height: 22px;
+      color: var(--text-secondary);
+      font-size: 11px;
+    }
+    .mini-action-btn:hover { color: var(--accent); }
+
+    .msg-reply-context {
+      background: rgba(0,0,0,0.15);
+      border-left: 3px solid var(--accent);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+
+    /* Pinned Message Bar */
+    .pinned-bar {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      z-index: 15;
+    }
+    .pinned-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .pinned-text {
+      color: var(--text-primary);
+      max-width: 480px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Message Input Box */
+    .chat-input-area {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-subtle);
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 20;
+    }
+    .reply-preview-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-elevated);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .input-compose-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    .compose-field-wrap {
+      flex: 1;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition-fast);
+    }
+    .compose-field-wrap:focus-within {
+      border-color: var(--border-focus);
+    }
+    .compose-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: none;
+      max-height: 120px;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .send-action-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      background: var(--accent);
+      color: var(--text-inverse);
+      flex-shrink: 0;
+    }
+    .send-action-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Right Details Inspector Panel */
+    .info-panel {
+      width: 320px;
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      flex-shrink: 0;
+      transition: var(--transition-normal);
+    }
+    .info-panel.collapsed {
+      display: none;
+    }
+    .info-header {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .info-hero {
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .hero-avatar {
+      width: 76px;
+      height: 76px;
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+    .info-hero-name {
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .info-hero-username {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .info-section {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .info-section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .meta-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 13.5px;
+    }
+    .meta-val { color: var(--text-secondary); }
+
+    /* Media Grid in Details */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .media-thumb {
+      aspect-ratio: 1;
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .media-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ==========================================================================
+       MODALS, DIALOGS & OVERLAYS
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 6, 10, 0.8);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-fast);
+      padding: 16px;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      transform: scale(0.96);
+      transition: transform var(--transition-normal);
+    }
+    .modal-backdrop.open .modal-card {
+      transform: scale(1);
+    }
+    .modal-head {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-head h3 { font-size: 16px; font-weight: 700; }
+    .modal-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .modal-foot {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Forms & Inputs inside modals */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .form-input, .form-select, .form-textarea {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 14px;
+      outline: none;
+      transition: var(--transition-fast);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--border-focus);
+    }
+    .form-hint {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .btn {
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+    .btn-secondary {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+    .btn-secondary:hover { background: var(--border-subtle); }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--text-inverse);
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+    .btn-danger:hover { opacity: 0.9; }
+
+    /* Calling Overlay (Voice & Video) */
+    .call-screen-overlay {
+      position: fixed;
+      inset: 0;
+      background: #080a0f;
+      z-index: 300;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 40px 20px;
+    }
+    .call-screen-overlay.active {
+      display: flex;
+    }
+    .call-video-container {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+    .call-video-feed {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.75;
+    }
+    .call-pip-preview {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 130px;
+      height: 180px;
+      background: var(--bg-surface);
+      border: 2px solid var(--accent);
+      border-radius: var(--radius-md);
+      z-index: 10;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .call-top-info {
+      z-index: 10;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .call-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-elevated);
+      animation: pulse-ring 2s infinite;
+    }
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(0, 229, 163, 0.4); }
+      70% { box-shadow: 0 0 0 22px rgba(0, 229, 163, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 229, 163, 0); }
+    }
+    .call-contact-name { font-size: 22px; font-weight: 700; }
+    .call-status-label { font-size: 14px; color: var(--accent); letter-spacing: 0.5px; }
+
+    .call-controls-dock {
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      background: rgba(20, 24, 34, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 12px 24px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+    }
+    .call-circle-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      font-size: 18px;
+    }
+    .call-circle-btn.hangup {
+      background: var(--danger);
+      color: #fff;
+      transform: scale(1.1);
+    }
+    .call-circle-btn.active-state {
+      background: var(--accent);
+      color: var(--text-inverse);
+    }
+
+    /* Toast system */
+    .toast-tray {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 400;
+      pointer-events: none;
+    }
+    .privex-toast {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-lg);
+      border-radius: var(--radius-md);
+      padding: 10px 18px;
+      font-size: 13.5px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+      animation: toast-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .privex-toast.success { border-left: 4px solid var(--accent); }
+    .privex-toast.error { border-left: 4px solid var(--danger); }
+    .privex-toast.warning { border-left: 4px solid var(--warning); }
+    @keyframes toast-in {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Empty states */
+    .empty-chat-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 30px;
+    }
+    .empty-icon-shield {
+      width: 80px;
+      height: 80px;
+      color: var(--border-subtle);
+      margin-bottom: 16px;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS (Mobile & Tablet)
+       ========================================================================== */
+    @media (max-width: 900px) {
+      .info-panel {
+        position: fixed;
+        right: 0;
+        top: 32px;
+        bottom: 0;
+        width: 100%;
+        max-width: 340px;
+        z-index: 40;
+        box-shadow: var(--shadow-lg);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .app-shell { flex-direction: column-reverse; }
+      .nav-rail {
+        width: 100%;
+        height: 56px;
+        flex-direction: row;
+        padding: 0 12px;
+        border-right: none;
+        border-top: 1px solid var(--border-subtle);
+        justify-content: space-around;
+      }
+      .brand-mark { display: none; }
+      .sidebar-pane {
+        width: 100%;
+        flex: 1;
+      }
+      .chat-workspace {
+        position: absolute;
+        inset: 0;
+        bottom: 56px;
+        z-index: 35;
+        display: none;
+      }
+      .chat-workspace.mobile-active {
+        display: flex;
+      }
+      .mobile-back-btn {
+        display: inline-flex !important;
+      }
+    }
+    .mobile-back-btn { display: none; }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       TOP SECURITY & HONESTY BANNER
+       ========================================================================== -->
+  <header class="prototype-banner" role="region" aria-label="System Notice">
+    <div style="display: flex; align-items: center;">
+      <span class="prototype-badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 4l7.53 13H4.47L12 6zm-1 5v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg>
+        Simulation Mode
+      </span>
+      <span>PRIVEX Architecture Preview: <strong>Zero Phone Required</strong> • End-to-End Encryption planned for production</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="display: inline-flex; align-items: center; gap: 4px; color: var(--accent);">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Status: Local Sandbox
+      </span>
+      <a href="javascript:void(0)" onclick="PrivexUI.openModal('legalModal')" style="color: var(--text-secondary); text-decoration: underline;">Compliance Specs</a>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       PRIMARY APPLICATION SHELL
+       ========================================================================== -->
+  <div class="app-shell" id="appRoot">
+
+    <!-- RAIL NAVIGATION (LEFT) -->
+    <nav class="nav-rail" aria-label="Main Navigation">
+      <div class="brand-mark" title="PRIVEX Monogram (Hex Vault)" onclick="PrivexUI.openModal('aboutModal')">
+        <!-- Original PRIVEX Geometric Vault Monogram -->
+        <svg width="26" height="26" viewBox="0 0 48 48" fill="none">
+          <polygon points="24,4 42,14 42,34 24,44 6,34 6,14" stroke="currentColor" stroke-width="3.5" fill="none" />
+          <path d="M24 16 L34 22 V30 L24 35 L14 30 V22 Z" stroke="currentColor" stroke-width="2.5" fill="none" opacity="0.8" />
+          <circle cx="24" cy="25.5" r="3.5" fill="currentColor" />
+        </svg>
+      </div>
+
+      <button class="rail-btn active" data-view="chats" onclick="PrivexUI.switchView('chats')" title="Conversations">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="badge" id="chatUnreadDot"></span>
+      </button>
+
+      <button class="rail-btn" data-view="discover" onclick="PrivexUI.switchView('discover')" title="Public Communities">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </button>
+
+      <button class="rail-btn" data-view="calls" onclick="PrivexUI.switchView('calls')" title="Call Logs">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </button>
+
+      <button class="rail-btn" data-view="saved" onclick="PrivexUI.openSavedNotes()" title="Encrypted Vault / Saved Notes">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </button>
+
+      <div class="nav-spacer"></div>
+
+      <button class="rail-btn" onclick="PrivexUI.toggleTheme()" title="Toggle Dark/Light Mode">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="themeIcon"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+
+      <button class="rail-btn" onclick="PrivexUI.openModal('settingsModal')" title="Privacy & Security Settings">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+
+      <div class="avatar-wrapper" onclick="PrivexUI.openModal('profileModal')" style="cursor: pointer;" title="Active Profile">
+        <div class="avatar" id="navSelfAvatar" style="width: 36px; height: 36px; font-size: 13px;">NI</div>
+        <div class="status-dot"></div>
+      </div>
+    </nav>
+
+    <!-- SIDEBAR PANE: CHAT LIST / PUBLIC DIRECTORY / CALL LOGS -->
+    <aside class="sidebar-pane" id="sidebarPane">
+      <div class="sidebar-header">
+        <div class="sidebar-title" id="sidebarHeaderTitle">Messages</div>
+        <div class="sidebar-actions">
+          <button class="icon-btn" onclick="PrivexUI.openModal('newChatModal')" title="New Direct Message">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <button class="icon-btn" onclick="PrivexUI.openModal('newGroupModal')" title="Create Group">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-filter-box">
+        <div class="search-input-wrapper">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" class="search-input" id="chatSearchInput" placeholder="Search @username, group or keyword..." oninput="PrivexUI.handleSearch(this.value)" />
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-pill active" onclick="PrivexUI.filterCategory('all', this)">All</button>
+          <button class="filter-pill" onclick="PrivexUI.filterCategory('direct', this)">Direct</button>
+          <button class="filter-pill" onclick="PrivexUI.filterCategory('groups', this)">Private Groups</button>
+          <button class="filter-pill" onclick="PrivexUI.filterCategory('public', this)">Communities</button>
+        </div>
+      </div>
+
+      <div class="chat-list-scroll" id="chatListContainer" role="list">
+        <!-- Rendered dynamically -->
+      </div>
+    </aside>
+
+    <!-- CENTER CHAT WORKSPACE -->
+    <main class="chat-workspace" id="chatWorkspace">
+      <!-- Top header of selected chat -->
+      <header class="conversation-header" id="convoHeader" style="display: none;">
+        <div class="chat-active-info" onclick="PrivexUI.toggleInfoPanel()">
+          <button class="icon-btn mobile-back-btn" onclick="event.stopPropagation(); PrivexUI.closeMobileChat();" title="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <div class="avatar-wrapper">
+            <div class="avatar" id="activeChatAvatar">--</div>
+            <div class="status-dot" id="activeOnlineDot"></div>
+          </div>
+          <div class="chat-header-names">
+            <div class="chat-header-title">
+              <span id="activeChatTitle">Select Conversation</span>
+              <span class="badge-verified" id="activeVerifiedBadge" style="display:none;" title="Verified Public Community">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m9 12 2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+              </span>
+            </div>
+            <div class="chat-header-sub">
+              <span id="activeChatSub">@username</span>
+              <span class="e2ee-tag" id="activeSecurityTag" title="Honest Prototype Security Indicator">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Prototype E2EE
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-header-tools">
+          <button class="icon-btn" onclick="PrivexCalls.initiate('voice')" title="Start Voice Call">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </button>
+          <button class="icon-btn" onclick="PrivexCalls.initiate('video')" title="Start Video Call">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          </button>
+          <button class="icon-btn" onclick="PrivexUI.promptSearchMessages()" title="Search in Chat">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </button>
+          <button class="icon-btn" onclick="PrivexUI.toggleInfoPanel()" title="Info & Options">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Optional Pinned Message banner -->
+      <div class="pinned-bar" id="pinnedBanner" style="display: none;">
+        <div class="pinned-content">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4a2 2 0 0 0-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42z"/><circle cx="9" cy="9" r="2"/></svg>
+          <span>Pinned:</span>
+          <span class="pinned-text" id="pinnedBannerText">Pinned message text goes here...</span>
+        </div>
+        <button class="icon-btn" style="width: 24px; height: 24px;" onclick="PrivexChat.unpinCurrent()" title="Dismiss pin">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Feed Container -->
+      <div class="message-stage" id="messageStage">
+        <!-- Empty placeholder when no chat selected -->
+        <div class="empty-chat-state" id="emptyPlaceholder">
+          <svg class="empty-icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+          <h2 style="font-size: 19px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">PRIVEX Secure Workspace</h2>
+          <p style="font-size: 13.5px; max-width: 380px; line-height: 1.5;">
+            No phone number required. Connect via unique username or participate in public community discussions.
+          </p>
+          <div style="margin-top: 18px; display: flex; gap: 10px;">
+            <button class="btn btn-secondary" onclick="PrivexUI.openModal('newChatModal')">Direct Message</button>
+            <button class="btn btn-primary" onclick="PrivexUI.openModal('newGroupModal')">Create Group</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message Composer Area -->
+      <footer class="chat-input-area" id="composerArea" style="display: none;">
+        <!-- Reply Context header -->
+        <div class="reply-preview-bar" id="replyPreviewBar" style="display: none;">
+          <div>
+            <span style="color: var(--accent); font-weight: 600;">Replying to: </span>
+            <span id="replyPreviewSnippet" style="color: var(--text-secondary);">Message...</span>
+          </div>
+          <button class="icon-btn" style="width: 20px; height: 20px;" onclick="PrivexChat.cancelReply()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="input-compose-row">
+          <button class="icon-btn" onclick="PrivexMedia.triggerUploadPrompt()" title="Attach image or file">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.49-8.49a4 4 0 0 1 5.66 5.66l-8.49 8.49a2 2 0 0 1-2.83-2.83l7.78-7.78"/></svg>
+          </button>
+          <button class="icon-btn" onclick="PrivexMedia.recordVoiceSim()" title="Record Voice Message (Simulated)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+
+          <div class="compose-field-wrap">
+            <textarea class="compose-input" id="messageTextInput" rows="1" placeholder="Write an encrypted message..." onkeydown="PrivexChat.handleInputKey(event)" oninput="PrivexChat.autoGrow(this)"></textarea>
+            <button class="icon-btn" style="width: 28px; height: 28px;" onclick="PrivexChat.insertEmoji('🔒')" title="Quick Insert Key">
+              🔒
+            </button>
+          </div>
+
+          <button class="send-action-btn" id="sendBtn" onclick="PrivexChat.dispatchCurrent()" title="Send Message">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </footer>
+    </main>
+
+    <!-- RIGHT PANEL: DETAILS & INSPECTOR -->
+    <aside class="info-panel collapsed" id="infoPanel">
+      <div class="info-header">
+        <span style="font-weight: 700; font-size: 15px;">Conversation Info</span>
+        <button class="icon-btn" onclick="PrivexUI.toggleInfoPanel()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="info-hero">
+        <div class="avatar hero-avatar" id="infoHeroAvatar">--</div>
+        <div class="info-hero-name" id="infoHeroName">Details</div>
+        <div class="info-hero-username" id="infoHeroUsername">@handle</div>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-top: 8px; line-height: 1.4;" id="infoHeroBio">
+          Privacy-conscious communicator on PRIVEX network.
+        </p>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">Encryption & Authenticity</div>
+        <div class="meta-item-row">
+          <span>Security Protocol</span>
+          <span class="meta-val" style="color: var(--accent); font-weight: 600;">E2EE (Prototype Mock)</span>
+        </div>
+        <div class="meta-item-row">
+          <span>Key Verification</span>
+          <span class="meta-val" style="font-family: var(--font-mono); font-size: 11px;">7FA9 • B312 • 408C</span>
+        </div>
+        <div class="meta-item-row">
+          <span>Disappearing Messages</span>
+          <span class="meta-val">Off</span>
+        </div>
+      </div>
+
+      <div class="info-section" id="infoMembersSection" style="display: none;">
+        <div class="info-section-title" id="infoMembersTitle">Group Members (0)</div>
+        <div id="infoMembersList" style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">Shared Media & Files</div>
+        <div class="media-grid" id="infoSharedMedia">
+          <div class="media-thumb"><span style="font-size: 11px; color: var(--text-muted);">No Media</span></div>
+        </div>
+      </div>
+
+      <div class="info-section" style="display: flex; flex-direction: column; gap: 8px;">
+        <button class="btn btn-secondary" style="width: 100%; justify-content: flex-start; gap: 8px;" onclick="PrivexUI.muteCurrentChat()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
+          Mute Notifications
+        </button>
+        <button class="btn btn-secondary" style="width: 100%; justify-content: flex-start; gap: 8px; color: var(--warning);" onclick="PrivexUI.openReportModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/></svg>
+          Report Conversation
+        </button>
+        <button class="btn btn-secondary" style="width: 100%; justify-content: flex-start; gap: 8px; color: var(--danger);" onclick="PrivexUI.blockCurrentContact()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+          Block User
+        </button>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- ==========================================================================
+       CALL OVERLAY MODAL (Voice / Video Simulation)
+       ========================================================================== -->
+  <div class="call-screen-overlay" id="callOverlay" aria-modal="true" role="dialog">
+    <div class="call-video-container" id="callVideoContainer" style="display: none;">
+      <video class="call-video-feed" autoplay playsinline muted loop poster="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' fill='%2312151c'><rect width='400' height='400'/><text x='50%25' y='50%25' fill='%23555' font-size='16' text-anchor='middle'>Encrypted Video Stream Simulated</text></svg>"></video>
+      <div class="call-pip-preview" id="callSelfPip">
+        <span>Your Cam (Mock)</span>
+      </div>
+    </div>
+
+    <div class="call-top-info">
+      <div class="call-avatar" id="callAvatarElem">?</div>
+      <div class="call-contact-name" id="callContactName">Caller</div>
+      <div class="call-status-label" id="callStatusLabel">Connecting WebRTC P2P...</div>
+    </div>
+
+    <div class="call-controls-dock">
+      <button class="call-circle-btn" id="callMicBtn" onclick="PrivexCalls.toggleMute()" title="Toggle Microphone">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+      </button>
+      <button class="call-circle-btn" id="callCamBtn" onclick="PrivexCalls.toggleCam()" title="Toggle Camera">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+      </button>
+      <button class="call-circle-btn hangup" onclick="PrivexCalls.terminate()" title="End Call">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08a.99.99 0 0 1 0-1.41C3.41 8.5 7.46 6.5 12 6.5s8.59 2 11.71 5.17c.39.39.39 1.02 0 1.41l-2.48 2.48c-.18.18-.43.29-.71.29s-.52-.1-.7-.28c-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL DIALOGS (New Chat, New Group, Settings, Legal, Profile, Report)
+       ========================================================================== -->
+
+  <!-- Modal: New Direct Message -->
+  <div class="modal-backdrop" id="newChatModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Start Direct Conversation</h3>
+        <button class="icon-btn" onclick="PrivexUI.closeModal('newChatModal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Search by Username (@handle)</label>
+          <input type="text" class="form-input" id="newChatUsernameInput" placeholder="@sarah or @rahim" />
+          <span class="form-hint">No phone numbers needed. Direct, zero-knowledge lookup.</span>
+        </div>
+        <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 4px;">SUGGESTED CONTACTS</div>
+        <div id="suggestedContactsList" style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Generated from mock users -->
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-secondary" onclick="PrivexUI.closeModal('newChatModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="PrivexChat.startDirectFromInput()">Open Conversation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New Group (Private or Public Community) -->
+  <div class="modal-backdrop" id="newGroupModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Create PRIVEX Group</h3>
+        <button class="icon-btn" onclick="PrivexUI.closeModal('newGroupModal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Group Name</label>
+          <input type="text" class="form-input" id="groupNameInput" placeholder="e.g. Core Security Research" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Group Type</label>
+          <select class="form-select" id="groupTypeSelect" onchange="PrivexUI.handleGroupTypeToggle(this.value)">
+            <option value="private">Private Group (Invite-only, hidden from directory search)</option>
+            <option value="public">Public Community (Open membership, searchable handle)</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="groupHandleWrap" style="display: none;">
+          <label class="form-label">Public Handle (@community_name)</label>
+          <input type="text" class="form-input" id="groupHandleInput" placeholder="@tech_collective" />
+          <span class="form-hint">Anyone will be able to search and join this community.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description & Rules</label>
+          <textarea class="form-textarea" id="groupDescInput" rows="2" placeholder="State group guidelines..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Permissions & Announcement Mode</label>
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 13.5px; cursor: pointer;">
+            <input type="checkbox" id="groupAdminOnlyCheckbox" />
+            <span>Admins Only announcement mode (Members cannot broadcast)</span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-secondary" onclick="PrivexUI.closeModal('newGroupModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="PrivexGroups.createFromModal()">Create Group</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Settings & Security Deep Dive -->
+  <div class="modal-backdrop" id="settingsModal">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-head">
+        <h3>Privacy & Security Settings</h3>
+        <button class="icon-btn" onclick="PrivexUI.closeModal('settingsModal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Account Identity Header -->
+        <div style="display: flex; align-items: center; gap: 14px; background: var(--bg-elevated); padding: 14px; border-radius: var(--radius-md);">
+          <div class="avatar" style="width: 48px; height: 48px;">NI</div>
+          <div>
+            <div style="font-weight: 700;" id="settingsDisplayName">Niyaz Ibtada</div>
+            <div style="font-size: 12.5px; color: var(--accent);" id="settingsUsername">@niyaz</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Phone Number: NONE (Privacy Secured)</div>
+          </div>
+        </div>
+
+        <!-- Privacy Matrix -->
+        <div class="form-group">
+          <label class="form-label">Account Privacy Matrix</label>
+          <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13.5px;">
+            <label style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Send Read Receipts</span>
+              <input type="checkbox" checked onchange="PrivexToast.show('Read receipts updated', 'info')" />
+            </label>
+            <label style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Show Online Status</span>
+              <input type="checkbox" checked onchange="PrivexToast.show('Online presence toggled', 'info')" />
+            </label>
+            <label style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Allow Directory Discovery by Handle</span>
+              <input type="checkbox" checked onchange="PrivexToast.show('Discoverability updated', 'info')" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Multi-factor & Recovery -->
+        <div class="form-group">
+          <label class="form-label">Authentication & Zero-Phone Recovery</label>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px 12px; border-radius: var(--radius-sm);">
+              <div>
+                <div style="font-weight: 600; font-size: 13px;">Authenticator App (TOTP)</div>
+                <div style="font-size: 11.5px; color: var(--text-muted);">RFC 6238 Software Token</div>
+              </div>
+              <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 12px;" onclick="PrivexToast.show('TOTP enrollment QR simulated in local storage', 'success')">Configure</button>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px 12px; border-radius: var(--radius-sm);">
+              <div>
+                <div style="font-weight: 600; font-size: 13px;">Passkeys / WebAuthn</div>
+                <div style="font-size: 11.5px; color: var(--text-muted);">Hardware FIDO2 biometric login</div>
+              </div>
+              <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 12px;" onclick="PrivexToast.show('WebAuthn credential registration mock called', 'info')">Register</button>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px 12px; border-radius: var(--radius-sm);">
+              <div>
+                <div style="font-weight: 600; font-size: 13px;">Emergency Recovery Codes</div>
+                <div style="font-size: 11.5px; color: var(--text-muted);">16-word emergency cryptographic recovery seed</div>
+              </div>
+              <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 12px;" onclick="PrivexUI.viewRecoveryCodes()">View</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Sessions -->
+        <div class="form-group">
+          <label class="form-label">Active Authorized Sessions</label>
+          <div style="font-size: 12px; display: flex; flex-direction: column; gap: 6px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-input); padding:8px 12px; border-radius:var(--radius-sm);">
+              <div>
+                <div style="font-weight:600; color:var(--accent);">Current Web Browser (Active Now)</div>
+                <div style="color:var(--text-muted); font-size:11px;">Client ID: PVX-LOCAL-PROTOTYPE</div>
+              </div>
+              <span style="color: var(--accent); font-size: 11px; font-weight:700;">ACTIVE</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary" style="margin-top:6px; font-size:12px; color:var(--warning);" onclick="PrivexToast.show('All other mock tokens revoked', 'warning')">Terminate All Other Sessions</button>
+        </div>
+
+        <!-- Danger Zone -->
+        <div style="border-top: 1px solid var(--border-subtle); padding-top: 14px; margin-top: 6px;">
+          <div class="form-label" style="color: var(--danger);">Data Ownership & Erasure</div>
+          <p style="font-size: 12px; color: var(--text-secondary); margin: 6px 0 10px;">
+            PRIVEX enforces your right to be forgotten. In production, this permanently wipes server metadata, public profiles, and crypto-shreds encrypted stores.
+          </p>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" style="font-size: 12px;" onclick="PrivexStorage.exportLocalDump()">Export Data Archive (JSON)</button>
+            <button class="btn btn-danger" style="font-size: 12px;" onclick="PrivexUI.promptAccountDeletion()">Erase Everything & Delete Account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: About & Honest Security Specification -->
+  <div class="modal-backdrop" id="aboutModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>About PRIVEX & Security Tenets</h3>
+        <button class="icon-btn" onclick="PrivexUI.closeModal('aboutModal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" style="font-size: 13.5px; line-height: 1.6; color: var(--text-secondary);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+          <div class="brand-mark" style="margin-bottom: 0; width: 38px; height: 38px;">
+            <svg width="22" height="22" viewBox="0 0 48 48" fill="none">
+              <polygon points="24,4 42,14 42,34 24,44 6,34 6,14" stroke="currentColor" stroke-width="3.5" fill="none" />
+              <path d="M24 16 L34 22 V30 L24 35 L14 30 V22 Z" stroke="currentColor" stroke-width="2.5" fill="none" />
+            </svg>
+          </div>
+          <div>
+            <div style="font-weight: 700; color: var(--text-primary); font-size: 16px;">PRIVEX v1.0.0 (Alpha Prototype)</div>
+            <div style="font-size: 11.5px; color: var(--accent);">"Private conversations. Your control."</div>
+          </div>
+        </div>
+
+        <p>
+          PRIVEX was engineered to decouple real-time communication from intrusive telecom identifiers. We believe your telephone number is a tracking vulnerability, not a username.
+        </p>
+
+        <h4 style="color: var(--text-primary); margin-top: 10px;">Security Reality Statement</h4>
+        <p style="font-size: 12.5px; background: var(--bg-input); padding: 10px; border-radius: var(--radius-sm); border-left: 3px solid var(--warning);">
+          <strong>Honesty Notice:</strong> This single-file distribution runs as a self-contained client preview using local mock persistence. It does not represent audited production cryptography or server-grade security. Production release requires an external Rust/Node WebSocket cluster, PostgreSQL with strict RLS, and audited Signal/MLS protocols.
+        </p>
+
+        <h4 style="color: var(--text-primary); margin-top: 10px;">Production Architecture Roadmap</h4>
+        <ul style="padding-left: 18px; font-size: 12.5px; display: flex; flex-direction: column; gap: 4px;">
+          <li><strong>Identity:</strong> Argon2id credential derivations with WebAuthn biometrics.</li>
+          <li><strong>Messaging:</strong> Double Ratchet E2EE with forward and post-compromise secrecy.</li>
+          <li><strong>VoIP/Video:</strong> WebRTC with encrypted SRTP peer signaling.</li>
+          <li><strong>Storage:</strong> Zero-knowledge encrypted client blobs; zero message plaintext at rest.</li>
+        </ul>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-primary" onclick="PrivexUI.closeModal('aboutModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Compliance, Privacy Policy & Google Play Specs -->
+  <div class="modal-backdrop" id="legalModal">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-head">
+        <h3>Privacy Policy & Google Play Compliance</h3>
+        <button class="icon-btn" onclick="PrivexUI.closeModal('legalModal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" style="font-size: 13px; line-height: 1.55; max-height: 60vh; overflow-y: auto;">
+        <h4 style="color: var(--text-primary);">1. Data Minimization Charter</h4>
+        <p>PRIVEX collects only what is mathematically strictly necessary to route packet traffic. We do NOT harvest, store, or sell:</p>
+        <ul style="padding-left: 18px; margin: 4px 0 10px;">
+          <li>Mobile telephone numbers or SIM identifiers.</li>
+          <li>Device address book / contact contacts.</li>
+          <li>Precise GPS location telemetry.</li>
+          <li>Third-party tracking or advertising identifiers.</li>
+        </ul>
+
+        <h4 style="color: var(--text-primary);">2. Play Store Data Safety Questionnaire Preparation</h4>
+        <p style="background: var(--bg-input); padding: 8px; border-radius: var(--radius-sm); font-size: 12px; color: var(--text-secondary);">
+          <strong>Note for Publishing Team:</strong> When filling Google Play's Data Safety form for the future packaged build, accurately declare:
+          <br />• <em>User IDs:</em> Collected for app functionality (Account creation).
+          <br />• <em>Messages & Photos:</em> Handled ephemerally or stored encrypted; none shared with 3rd parties.
+          <br />• <em>Data Encryption:</em> Transferred over HTTPS/WSS; encrypted at rest.
+          <br />• <em>Deletion Mechanism:</em> Yes, verified in-app account and data deletion available.
+        </p>
+
+        <h4 style="color: var(--text-primary);">3. Community Safety & Moderation</h4>
+        <p>
+          Users may block offenders and file cryptographic abuse reports. For public communities, administrators possess granular moderation capabilities (kick, ban, mute, announce-only).
+        </p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-primary" onclick="PrivexUI.closeModal('legalModal')">Understood</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Abuse Reporting Dialog -->
+  <div class="modal-backdrop" id="reportModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Report User or Group</h3>
+        <button class="icon-btn" onclick="PrivexUI.closeModal('reportModal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--text-secondary);">
+          Reports are handled confidentially to enforce Community Safety guidelines. Please select the primary violation:
+        </p>
+        <div class="form-group">
+          <select class="form-select" id="reportReasonSelect">
+            <option value="spam">Unsolicited spam or commercial flooding</option>
+            <option value="harassment">Targeted harassment or threats</option>
+            <option value="impersonation">Identity theft or system impersonation</option>
+            <option value="fraud">Fraud, phishing, or financial scam</option>
+            <option value="illegal">Illegal content or severe abuse</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Additional Context (Optional)</label>
+          <textarea class="form-textarea" id="reportDetailsInput" placeholder="Describe the violation..."></textarea>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-secondary" onclick="PrivexUI.closeModal('reportModal')">Cancel</button>
+        <button class="btn btn-danger" onclick="PrivexUI.submitReport()">Submit Report</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Active Profile / Self Inspection -->
+  <div class="modal-backdrop" id="profileModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Your PRIVEX Identity</h3>
+        <button class="icon-btn" onclick="PrivexUI.closeModal('profileModal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <div class="avatar hero-avatar" style="margin: 0 auto 12px;">NI</div>
+        <h3 id="profileModalName">Niyaz Ibtada</h3>
+        <div style="font-size: 13.5px; color: var(--accent); font-weight: 600;" id="profileModalUsername">@niyaz</div>
+        <div style="margin-top: 14px; text-align: left; background: var(--bg-input); padding: 12px; border-radius: var(--radius-sm); font-size: 13px;">
+          <div style="color: var(--text-muted); font-size: 11px; margin-bottom: 2px;">STATUS / BIO</div>
+          <div>Architecting privacy-first infrastructure. No phone number required.</div>
+        </div>
+        <div style="margin-top: 8px; text-align: left; background: var(--bg-input); padding: 12px; border-radius: var(--radius-sm); font-size: 13px;">
+          <div style="color: var(--text-muted); font-size: 11px; margin-bottom: 2px;">PUBLIC IDENTITY KEY</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; word-break: break-all; color: var(--text-secondary);">
+            ed25519_pk1x9m4v4z3p8k2w8u4e6d3q9y0a1b2c3d4e5f6g7h8j
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-primary" onclick="PrivexUI.closeModal('profileModal')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-tray" id="toastContainer" aria-live="polite"></div>
+
+  <!-- HIDDEN FILE PICKER FOR SIMULATED ATTACHMENTS -->
+  <input type="file" id="privexHiddenFile" style="display: none;" accept="image/*,.pdf,.doc,.txt" onchange="PrivexMedia.handleFileSelected(event)" />
+
+  <!-- ==========================================================================
+       PRIVEX JAVASCRIPT CORE ARCHITECTURE
+       Organized modularly: AUTH, USERS, CHAT, MESSAGES, GROUPS, CALLS, STORAGE
+       ========================================================================== -->
+  <script>
+    /**
+     * PRIVEX CLIENT SUITE — JAVASCRIPT ENGINE
+     * -------------------------------------------------------------
+     * Honest Local Sandbox Implementation with Full Domain Facades.
+     */
+
+    // 1. STORAGE MODULE: Manages Demo Persistence with Isolation Guard
+    const PrivexStorage = {
+      KEY_PREFIX: 'privex_db_v1_',
+
+      get(key, fallback = null) {
+        try {
+          const raw = localStorage.getItem(this.KEY_PREFIX + key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (e) {
+          console.warn('Storage read fallback', e);
+          return fallback;
+        }
+      },
+
+      set(key, val) {
+        try {
+          localStorage.setItem(this.KEY_PREFIX + key, JSON.stringify(val));
+        } catch (e) {
+          console.error('Storage write error', e);
+        }
+      },
+
+      remove(key) {
+        localStorage.removeItem(this.KEY_PREFIX + key);
+      },
+
+      exportLocalDump() {
+        const dump = {
+          user: PrivexState.currentUser,
+          chats: PrivexState.chats,
+          messages: PrivexState.messages,
+          timestamp: new Date().toISOString()
+        };
+        const blob = new Blob([JSON.stringify(dump, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `privex_export_${Date.now()}.json`;
+        a.click();
+        PrivexToast.show('Data archive downloaded successfully', 'success');
+      },
+
+      wipeAllData() {
+        Object.keys(localStorage).forEach(k => {
+          if (k.startsWith(this.KEY_PREFIX)) localStorage.removeItem(k);
+        });
+      }
+    };
+
+    // 2. CENTRAL APPLICATION STATE
+    const PrivexState = {
+      theme: 'dark',
+      currentView: 'chats', // chats | discover | calls
+      activeChatId: null,
+      replyingToMsgId: null,
+      callState: {
+        active: false,
+        type: null,
+        duration: 0,
+        timerId: null,
+        muted: false,
+        camOff: false
+      },
+      currentUser: {
+        id: 'usr_me',
+        username: '@niyaz',
+        displayName: 'Niyaz Ibtada',
+        avatarText: 'NI',
+        bio: 'Architecting privacy-first infrastructure. Zero phone requirements.'
+      },
+      mockUsers: [
+        { id: 'usr_1', username: '@alex', displayName: 'Alex Mercer', avatarText: 'AM', online: true, bio: 'Cryptography researcher & open-source builder.' },
+        { id: 'usr_2', username: '@sarah', displayName: 'Sarah Connor', avatarText: 'SC', online: false, bio: 'Digital rights advocate & journalist.' },
+        { id: 'usr_3', username: '@rahim', displayName: 'Rahim Khan', avatarText: 'RK', online: true, bio: 'Distributed systems architect.' },
+        { id: 'usr_4', username: '@developer', displayName: 'PRIVEX Dev Bot', avatarText: 'DB', online: true, bio: 'Automated test harness for local simulation.' }
+      ],
+      chats: [],
+      messages: {}
+    };
+
+    // 3. SEED DATA GENERATOR (Runs when local storage is fresh)
+    function initializeSeedData() {
+      const storedChats = PrivexStorage.get('chats');
+      const storedMsgs = PrivexStorage.get('messages');
+
+      if (storedChats && storedMsgs) {
+        PrivexState.chats = storedChats;
+        PrivexState.messages = storedMsgs;
+        return;
+      }
+
+      // Initial Default Seed
+      PrivexState.chats = [
+        {
+          id: 'chat_alex',
+          type: 'direct',
+          targetUserId: 'usr_1',
+          title: 'Alex Mercer',
+          handle: '@alex',
+          avatarText: 'AM',
+          online: true,
+          unreadCount: 1,
+          lastUpdated: Date.now() - 1000 * 60 * 5,
+          pinnedId: null,
+          verified: false
+        },
+        {
+          id: 'chat_tech_community',
+          type: 'public',
+          title: 'Tech & Cryptography Community',
+          handle: '@tech_community',
+          avatarText: 'TC',
+          online: true,
+          unreadCount: 0,
+          lastUpdated: Date.now() - 1000 * 60 * 45,
+          pinnedId: 'msg_pin_1',
+          verified: true,
+          description: 'Open public exchange for privacy researchers and engineers.',
+          adminOnly: false,
+          memberCount: 1420
+        },
+        {
+          id: 'chat_private_vault',
+          type: 'private_group',
+          title: 'Project Zero-Knowledge',
+          handle: 'Private Group',
+          avatarText: 'ZK',
+          online: true,
+          unreadCount: 0,
+          lastUpdated: Date.now() - 1000 * 60 * 180,
+          pinnedId: null,
+          verified: false,
+          description: 'Invite-only group. Unlisted in public searches.',
+          adminOnly: false,
+          members: ['usr_me', 'usr_1', 'usr_3']
+        }
+      ];
+
+      PrivexState.messages = {
+        'chat_alex': [
+          {
+            id: 'm_1',
+            senderId: 'usr_1',
+            senderName: 'Alex Mercer',
+            text: 'Hey Niyaz! I just tested the new account registration. Zero phone numbers requested—this is what true privacy looks like.',
+            timestamp: Date.now() - 1000 * 60 * 30,
+            status: 'read'
+          },
+          {
+            id: 'm_2',
+            senderId: 'usr_me',
+            senderName: 'Niyaz Ibtada',
+            text: 'Exactly. We derive keys directly from user-controlled credentials and WebAuthn. No SIM swapping possible here.',
+            timestamp: Date.now() - 1000 * 60 * 20,
+            status: 'read'
+          },
+          {
+            id: 'm_3',
+            senderId: 'usr_1',
+            senderName: 'Alex Mercer',
+            text: 'Check this diagram when you get a chance.',
+            timestamp: Date.now() - 1000 * 60 * 5,
+            status: 'delivered',
+            mediaUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="160" fill="%231a2233"><rect width="300" height="160" rx="10"/><text x="50%25" y="50%25" fill="%2300e5a3" font-size="14" font-family="sans-serif" text-anchor="middle" font-weight="bold">Zero-Phone Security Architecture</text></svg>'
+          }
+        ],
+        'chat_tech_community': [
+          {
+            id: 'msg_pin_1',
+            senderId: 'usr_4',
+            senderName: 'PRIVEX Dev Bot',
+            text: 'Welcome to the public forum! Remember: Be respectful and avoid sharing sensitive private credentials publicly.',
+            timestamp: Date.now() - 1000 * 60 * 300,
+            status: 'read',
+            pinned: true
+          },
+          {
+            id: 'm_pub_2',
+            senderId: 'usr_3',
+            senderName: 'Rahim Khan',
+            text: 'Decentralized directory routing looking very smooth on the 2026 build.',
+            timestamp: Date.now() - 1000 * 60 * 45,
+            status: 'read'
+          }
+        ],
+        'chat_private_vault': [
+          {
+            id: 'm_priv_1',
+            senderId: 'usr_me',
+            senderName: 'Niyaz Ibtada',
+            text: 'Private workspace established. This group does not broadcast to directory indexes.',
+            timestamp: Date.now() - 1000 * 60 * 180,
+            status: 'read'
+          }
+        ],
+        'chat_saved_notes': [
+          {
+            id: 'm_save_1',
+            senderId: 'usr_me',
+            senderName: 'Encrypted Notes',
+            text: 'Emergency backup recovery phrase generated securely.',
+            timestamp: Date.now() - 1000 * 60 * 1400,
+            status: 'read'
+          }
+        ]
+      };
+
+      saveStateToDisk();
+    }
+
+    function saveStateToDisk() {
+      PrivexStorage.set('chats', PrivexState.chats);
+      PrivexStorage.set('messages', PrivexState.messages);
+    }
+
+    // 4. CHAT & MESSAGING ENGINE
+    const PrivexChat = {
+      selectChat(chatId) {
+        PrivexState.activeChatId = chatId;
+        const chat = PrivexState.chats.find(c => c.id === chatId);
+        if (!chat) return;
+
+        chat.unreadCount = 0;
+        saveStateToDisk();
+
+        // Mobile responsiveness helper
+        document.getElementById('chatWorkspace').classList.add('mobile-active');
+
+        // Update UI Header
+        document.getElementById('convoHeader').style.display = 'flex';
+        document.getElementById('composerArea').style.display = 'flex';
+        document.getElementById('emptyPlaceholder').style.display = 'none';
+
+        document.getElementById('activeChatAvatar').textContent = chat.avatarText;
+        document.getElementById('activeChatTitle').textContent = chat.title;
+        document.getElementById('activeChatSub').textContent = chat.handle || (chat.type === 'private_group' ? 'Private Group' : '@direct');
+
+        const onlineDot = document.getElementById('activeOnlineDot');
+        if (chat.online) onlineDot.classList.remove('offline');
+        else onlineDot.classList.add('offline');
+
+        const verifiedBadge = document.getElementById('activeVerifiedBadge');
+        verifiedBadge.style.display = chat.verified ? 'inline-flex' : 'none';
+
+        // Pin Banner
+        this.renderPinnedBanner(chat);
+
+        // Render Feed
+        this.renderMessages(chatId);
+        PrivexUI.renderChatList();
+        this.scrollToBottom();
+      },
+
+      renderPinnedBanner(chat) {
+        const banner = document.getElementById('pinnedBanner');
+        if (chat.pinnedId) {
+          const msgs = PrivexState.messages[chat.id] || [];
+          const pinnedMsg = msgs.find(m => m.id === chat.pinnedId);
+          if (pinnedMsg) {
+            document.getElementById('pinnedBannerText').textContent = pinnedMsg.text;
+            banner.style.display = 'flex';
+            return;
+          }
+        }
+        banner.style.display = 'none';
+      },
+
+      unpinCurrent() {
+        const chat = PrivexState.chats.find(c => c.id === PrivexState.activeChatId);
+        if (chat) {
+          chat.pinnedId = null;
+          saveStateToDisk();
+          this.renderPinnedBanner(chat);
+          PrivexToast.show('Message unpinned', 'info');
+        }
+      },
+
+      renderMessages(chatId) {
+        const stage = document.getElementById('messageStage');
+        const msgs = PrivexState.messages[chatId] || [];
+
+        // Clear existing message elements except placeholder
+        Array.from(stage.children).forEach(el => {
+          if (el.id !== 'emptyPlaceholder') el.remove();
+        });
+
+        // Date divider / system disclaimer notice
+        const disclaimerNotice = document.createElement('div');
+        disclaimerNotice.className = 'system-notice';
+        disclaimerNotice.innerHTML = `
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Conversations are protected with client-side prototype sandboxing.
+        `;
+        stage.appendChild(disclaimerNotice);
+
+        msgs.forEach(msg => {
+          const isOut = msg.senderId === PrivexState.currentUser.id;
+          const cluster = document.createElement('div');
+          cluster.className = `message-cluster ${isOut ? 'outgoing' : 'incoming'}`;
+          cluster.id = `msg_node_${msg.id}`;
+
+          let innerMedia = '';
+          if (msg.mediaUrl) {
+            innerMedia = `<img src="${msg.mediaUrl}" class="msg-media-img" alt="Attachment" onclick="window.open('${msg.mediaUrl}','_blank')"/>`;
+          }
+
+          let innerVoice = '';
+          if (msg.voiceNote) {
+            innerVoice = `
+              <div class="msg-voice-note">
+                <button class="voice-play-btn" onclick="PrivexMedia.playVoiceSample(this)">▶</button>
+                <div class="voice-wave">
+                  <div class="wave-bar active" style="height: 12px;"></div>
+                  <div class="wave-bar active" style="height: 18px;"></div>
+                  <div class="wave-bar active" style="height: 8px;"></div>
+                  <div class="wave-bar" style="height: 14px;"></div>
+                  <div class="wave-bar" style="height: 10px;"></div>
+                  <div class="wave-bar" style="height: 16px;"></div>
+                </div>
+                <span style="font-size: 11px; color: var(--text-muted);">0:08</span>
+              </div>
+            `;
+          }
+
+          let replyMarkup = '';
+          if (msg.replySnippet) {
+            replyMarkup = `<div class="msg-reply-context">↳ ${PrivexUI.escapeHtml(msg.replySnippet)}</div>`;
+          }
+
+          const statusIcon = isOut ? (msg.status === 'read' ? '✓✓' : '✓') : '';
+
+          cluster.innerHTML = `
+            ${!isOut ? `<div class="msg-sender-label">${PrivexUI.escapeHtml(msg.senderName || 'Anonymous')}</div>` : ''}
+            <div class="msg-bubble ${msg.pinned ? 'pinned' : ''}">
+              <div class="msg-actions-hover">
+                <button class="mini-action-btn" title="Reply" onclick="PrivexChat.setReply('${msg.id}')">↩</button>
+                <button class="mini-action-btn" title="Pin" onclick="PrivexChat.pinMessage('${msg.id}')">📌</button>
+                <button class="mini-action-btn" title="Copy" onclick="PrivexChat.copyText('${PrivexUI.escapeHtml(msg.text)}')">📋</button>
+                ${isOut ? `<button class="mini-action-btn" title="Delete" onclick="PrivexChat.deleteMessage('${msg.id}')">🗑</button>` : ''}
+              </div>
+              ${replyMarkup}
+              <div class="msg-content">${PrivexUI.escapeHtml(msg.text)}</div>
+              ${innerMedia}
+              ${innerVoice}
+              <div class="msg-footer">
+                <span>${PrivexUI.formatTime(msg.timestamp)}</span>
+                <span class="msg-status-icon">${statusIcon}</span>
+              </div>
+            </div>
+          `;
+          stage.appendChild(cluster);
+        });
+      },
+
+      dispatchCurrent() {
+        const input = document.getElementById('messageTextInput');
+        const text = input.value.trim();
+        if (!text || !PrivexState.activeChatId) return;
+
+        const activeChat = PrivexState.chats.find(c => c.id === PrivexState.activeChatId);
+        if (activeChat && activeChat.adminOnly && activeChat.type === 'public') {
+          PrivexToast.show('Broadcast restricted: Only administrators can post here.', 'warning');
+          return;
+        }
+
+        let replySnippet = null;
+        if (PrivexState.replyingToMsgId) {
+          const msgs = PrivexState.messages[activeChat.id] || [];
+          const target = msgs.find(m => m.id === PrivexState.replyingToMsgId);
+          if (target) replySnippet = target.text.slice(0, 60);
+        }
+
+        const newMsg = {
+          id: 'm_' + Date.now(),
+          senderId: PrivexState.currentUser.id,
+          senderName: PrivexState.currentUser.displayName,
+          text: text,
+          timestamp: Date.now(),
+          status: 'delivered',
+          replySnippet: replySnippet
+        };
+
+        if (!PrivexState.messages[activeChat.id]) PrivexState.messages[activeChat.id] = [];
+        PrivexState.messages[activeChat.id].push(newMsg);
+
+        activeChat.lastUpdated = Date.now();
+        activeChat.lastSnippet = text;
+
+        input.value = '';
+        input.style.height = 'auto';
+        this.cancelReply();
+        saveStateToDisk();
+
+        this.renderMessages(activeChat.id);
+        PrivexUI.renderChatList();
+        this.scrollToBottom();
+
+        // Trigger intelligent automated peer response in Direct mode
+        if (activeChat.type === 'direct') {
+          this.triggerSimulatedPeerReply(activeChat.id, text);
+        }
+      },
+
+      triggerSimulatedPeerReply(chatId, query) {
+        setTimeout(() => {
+          if (!PrivexState.messages[chatId]) return;
+          const replies = [
+            "Encrypted packet received and verified on local node.",
+            "Acknowledged. The zero-knowledge authentication model is holding up perfectly.",
+            "Got it! Privacy-first communication without arbitrary telephone leaks is the future.",
+            "Verified! Tested session rotation and WebAuthn signatures—everything checks out."
+          ];
+          const autoText = replies[Math.floor(Math.random() * replies.length)];
+          const chat = PrivexState.chats.find(c => c.id === chatId);
+
+          const mockReply = {
+            id: 'm_' + Date.now(),
+            senderId: chat ? chat.targetUserId : 'usr_peer',
+            senderName: chat ? chat.title : 'Peer',
+            text: autoText,
+            timestamp: Date.now(),
+            status: 'read'
+          };
+
+          PrivexState.messages[chatId].push(mockReply);
+          if (chat) {
+            chat.lastUpdated = Date.now();
+            chat.lastSnippet = autoText;
+            if (PrivexState.activeChatId !== chatId) chat.unreadCount++;
+          }
+          saveStateToDisk();
+
+          if (PrivexState.activeChatId === chatId) {
+            this.renderMessages(chatId);
+            this.scrollToBottom();
+          }
+          PrivexUI.renderChatList();
+        }, 1200);
+      },
+
+      setReply(msgId) {
+        PrivexState.replyingToMsgId = msgId;
+        const msgs = PrivexState.messages[PrivexState.activeChatId] || [];
+        const target = msgs.find(m => m.id === msgId);
+        if (target) {
+          document.getElementById('replyPreviewSnippet').textContent = target.text.slice(0, 50);
+          document.getElementById('replyPreviewBar').style.display = 'flex';
+          document.getElementById('messageTextInput').focus();
+        }
+      },
+
+      cancelReply() {
+        PrivexState.replyingToMsgId = null;
+        document.getElementById('replyPreviewBar').style.display = 'none';
+      },
+
+      pinMessage(msgId) {
+        const chat = PrivexState.chats.find(c => c.id === PrivexState.activeChatId);
+        if (chat) {
+          chat.pinnedId = msgId;
+          saveStateToDisk();
+          this.renderPinnedBanner(chat);
+          this.renderMessages(chat.id);
+          PrivexToast.show('Message pinned to conversation header', 'success');
+        }
+      },
+
+      deleteMessage(msgId) {
+        const msgs = PrivexState.messages[PrivexState.activeChatId] || [];
+        const index = msgs.findIndex(m => m.id === msgId);
+        if (index !== -1) {
+          msgs.splice(index, 1);
+          saveStateToDisk();
+          this.renderMessages(PrivexState.activeChatId);
+          PrivexToast.show('Message purged from conversation', 'info');
+        }
+      },
+
+      copyText(text) {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text);
+          PrivexToast.show('Copied to clipboard', 'info');
+        }
+      },
+
+      startDirectFromInput() {
+        const input = document.getElementById('newChatUsernameInput');
+        const handle = input.value.trim().toLowerCase();
+        if (!handle) return;
+
+        const normalized = handle.startsWith('@') ? handle : '@' + handle;
+        const matched = PrivexState.mockUsers.find(u => u.username.toLowerCase() === normalized);
+
+        const newChat = {
+          id: 'chat_' + (matched ? matched.id : Date.now()),
+          type: 'direct',
+          targetUserId: matched ? matched.id : 'usr_custom',
+          title: matched ? matched.displayName : normalized,
+          handle: normalized,
+          avatarText: matched ? matched.avatarText : normalized.slice(1, 3).toUpperCase(),
+          online: matched ? matched.online : true,
+          unreadCount: 0,
+          lastUpdated: Date.now(),
+          pinnedId: null,
+          verified: false
+        };
+
+        const existing = PrivexState.chats.find(c => c.handle === normalized);
+        if (existing) {
+          PrivexUI.closeModal('newChatModal');
+          this.selectChat(existing.id);
+          return;
+        }
+
+        PrivexState.chats.unshift(newChat);
+        PrivexState.messages[newChat.id] = [
+          {
+            id: 'm_' + Date.now(),
+            senderId: 'usr_me',
+            senderName: PrivexState.currentUser.displayName,
+            text: `Started new private zero-phone session with ${normalized}`,
+            timestamp: Date.now(),
+            status: 'read'
+          }
+        ];
+
+        saveStateToDisk();
+        PrivexUI.closeModal('newChatModal');
+        input.value = '';
+        this.selectChat(newChat.id);
+        PrivexToast.show('New direct conversation opened', 'success');
+      },
+
+      insertEmoji(char) {
+        const input = document.getElementById('messageTextInput');
+        input.value += char;
+        input.focus();
+      },
+
+      handleInputKey(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          this.dispatchCurrent();
+        }
+      },
+
+      autoGrow(el) {
+        el.style.height = 'auto';
+        el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+      },
+
+      scrollToBottom() {
+        const stage = document.getElementById('messageStage');
+        setTimeout(() => {
+          stage.scrollTop = stage.scrollHeight;
+        }, 30);
+      }
+    };
+
+    // 5. GROUPS & COMMUNITIES ENGINE
+    const PrivexGroups = {
+      createFromModal() {
+        const name = document.getElementById('groupNameInput').value.trim();
+        const type = document.getElementById('groupTypeSelect').value;
+        const handle = document.getElementById('groupHandleInput').value.trim();
+        const desc = document.getElementById('groupDescInput').value.trim();
+        const adminOnly = document.getElementById('groupAdminOnlyCheckbox').checked;
+
+        if (!name) {
+          PrivexToast.show('Please enter a group name', 'error');
+          return;
+        }
+
+        let formattedHandle = '';
+        if (type === 'public') {
+          if (!handle) {
+            PrivexToast.show('Public communities require a public @handle', 'warning');
+            return;
+          }
+          formattedHandle = handle.startsWith('@') ? handle : '@' + handle;
+        } else {
+          formattedHandle = 'Private Group (Invite-only)';
+        }
+
+        const newGroup = {
+          id: 'grp_' + Date.now(),
+          type: type === 'public' ? 'public' : 'private_group',
+          title: name,
+          handle: formattedHandle,
+          avatarText: name.slice(0, 2).toUpperCase(),
+          online: true,
+          unreadCount: 0,
+          lastUpdated: Date.now(),
+          pinnedId: null,
+          verified: type === 'public',
+          description: desc || 'Zero-phone privacy group on PRIVEX.',
+          adminOnly: adminOnly,
+          members: ['usr_me', 'usr_1']
+        };
+
+        PrivexState.chats.unshift(newGroup);
+        PrivexState.messages[newGroup.id] = [
+          {
+            id: 'm_init_' + Date.now(),
+            senderId: PrivexState.currentUser.id,
+            senderName: PrivexState.currentUser.displayName,
+            text: `Group "${name}" established. Privacy type: ${type.toUpperCase()}.`,
+            timestamp: Date.now(),
+            status: 'read'
+          }
+        ];
+
+        saveStateToDisk();
+        PrivexUI.closeModal('newGroupModal');
+        PrivexChat.selectChat(newGroup.id);
+        PrivexToast.show(`${type === 'public' ? 'Public Community' : 'Private Group'} created`, 'success');
+      }
+    };
+
+    // 6. CALL SIMULATION (Voice & Video WebRTC Abstraction)
+    const PrivexCalls = {
+      initiate(type) {
+        const chat = PrivexState.chats.find(c => c.id === PrivexState.activeChatId);
+        if (!chat) {
+          PrivexToast.show('Select a contact first', 'warning');
+          return;
+        }
+
+        PrivexState.callState.active = true;
+        PrivexState.callState.type = type;
+        PrivexState.callState.duration = 0;
+        PrivexState.callState.muted = false;
+        PrivexState.callState.camOff = false;
+
+        const overlay = document.getElementById('callOverlay');
+        overlay.classList.add('active');
+
+        document.getElementById('callAvatarElem').textContent = chat.avatarText;
+        document.getElementById('callContactName').textContent = chat.title;
+        document.getElementById('callStatusLabel').textContent = `Encrypted ${type.toUpperCase()} P2P Handshake (WebRTC Mock)...`;
+
+        const videoWrap = document.getElementById('callVideoContainer');
+        videoWrap.style.display = (type === 'video') ? 'flex' : 'none';
+
+        // Connect simulation after 1.5s
+        setTimeout(() => {
+          if (!PrivexState.callState.active) return;
+          document.getElementById('callStatusLabel').textContent = 'Connected (SRTP AES-256 E2EE)';
+          PrivexState.callState.timerId = setInterval(() => {
+            PrivexState.callState.duration++;
+            const mins = String(Math.floor(PrivexState.callState.duration / 60)).padStart(2, '0');
+            const secs = String(PrivexState.callState.duration % 60).padStart(2, '0');
+            document.getElementById('callStatusLabel').textContent = `Secure Call — ${mins}:${secs}`;
+          }, 1000);
+        }, 1500);
+      },
+
+      toggleMute() {
+        PrivexState.callState.muted = !PrivexState.callState.muted;
+        const btn = document.getElementById('callMicBtn');
+        if (PrivexState.callState.muted) {
+          btn.classList.add('active-state');
+          PrivexToast.show('Microphone muted', 'info');
+        } else {
+          btn.classList.remove('active-state');
+          PrivexToast.show('Microphone live', 'info');
+        }
+      },
+
+      toggleCam() {
+        PrivexState.callState.camOff = !PrivexState.callState.camOff;
+        const btn = document.getElementById('callCamBtn');
+        const selfPip = document.getElementById('callSelfPip');
+        if (PrivexState.callState.camOff) {
+          btn.classList.add('active-state');
+          selfPip.style.opacity = '0.2';
+          PrivexToast.show('Camera disabled', 'info');
+        } else {
+          btn.classList.remove('active-state');
+          selfPip.style.opacity = '1';
+          PrivexToast.show('Camera active', 'info');
+        }
+      },
+
+      terminate() {
+        clearInterval(PrivexState.callState.timerId);
+        PrivexState.callState.active = false;
+        document.getElementById('callOverlay').classList.remove('active');
+        PrivexToast.show('Call ended. Session keys wiped from volatile RAM.', 'info');
+      }
+    };
+
+    // 7. MEDIA & VOICE ATTACHMENT SIMULATOR
+    const PrivexMedia = {
+      triggerUploadPrompt() {
+        document.getElementById('privexHiddenFile').click();
+      },
+
+      handleFileSelected(event) {
+        const file = event.target.files[0];
+        if (!file || !PrivexState.activeChatId) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const isImage = file.type.startsWith('image/');
+          const newMsg = {
+            id: 'm_' + Date.now(),
+            senderId: PrivexState.currentUser.id,
+            senderName: PrivexState.currentUser.displayName,
+            text: isImage ? 'Shared an encrypted image' : `Attached file: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
+            mediaUrl: isImage ? e.target.result : null,
+            timestamp: Date.now(),
+            status: 'delivered'
+          };
+
+          if (!PrivexState.messages[PrivexState.activeChatId]) PrivexState.messages[PrivexState.activeChatId] = [];
+          PrivexState.messages[PrivexState.activeChatId].push(newMsg);
+
+          const chat = PrivexState.chats.find(c => c.id === PrivexState.activeChatId);
+          if (chat) {
+            chat.lastUpdated = Date.now();
+            chat.lastSnippet = newMsg.text;
+          }
+
+          saveStateToDisk();
+          PrivexChat.renderMessages(PrivexState.activeChatId);
+          PrivexChat.scrollToBottom();
+          PrivexToast.show('Media encrypted and shared', 'success');
+        };
+
+        if (file.type.startsWith('image/')) reader.readAsDataURL(file);
+        else reader.readAsArrayBuffer(file);
+      },
+
+      recordVoiceSim() {
+        if (!PrivexState.activeChatId) return;
+        PrivexToast.show('Recording audio sample...', 'info');
+
+        setTimeout(() => {
+          const newMsg = {
+            id: 'm_' + Date.now(),
+            senderId: PrivexState.currentUser.id,
+            senderName: PrivexState.currentUser.displayName,
+            text: 'Voice message (0:08)',
+            voiceNote: true,
+            timestamp: Date.now(),
+            status: 'delivered'
+          };
+
+          PrivexState.messages[PrivexState.activeChatId].push(newMsg);
+          saveStateToDisk();
+          PrivexChat.renderMessages(PrivexState.activeChatId);
+          PrivexChat.scrollToBottom();
+          PrivexToast.show('Voice message encrypted and sent', 'success');
+        }, 1200);
+      },
+
+      playVoiceSample(btn) {
+        btn.textContent = '■';
+        PrivexToast.show('Simulated audio stream playing', 'info');
+        setTimeout(() => { btn.textContent = '▶'; }, 3000);
+      }
+    };
+
+    // 8. TOAST SYSTEM
+    const PrivexToast = {
+      show(message, type = 'info') {
+        const tray = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `privex-toast ${type}`;
+
+        const icon = type === 'success' ? '✓' : (type === 'error' ? '⚠' : 'ℹ');
+        toast.innerHTML = `<span style="font-weight:700;">${icon}</span> <span>${PrivexUI.escapeHtml(message)}</span>`;
+        tray.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 250);
+        }, 3200);
+      }
+    };
+
+    // 9. UI ORCHESTRATION & VIEW CONTROLLER
+    const PrivexUI = {
+      init() {
+        initializeSeedData();
+        this.renderChatList();
+        this.renderSuggestedContacts();
+
+        // Restore theme
+        const savedTheme = PrivexStorage.get('theme', 'dark');
+        this.applyTheme(savedTheme);
+
+        // Auto select first chat on larger screens
+        if (window.innerWidth > 720 && PrivexState.chats.length > 0) {
+          PrivexChat.selectChat(PrivexState.chats[0].id);
+        }
+      },
+
+      renderChatList(filterText = '', filterCat = 'all') {
+        const container = document.getElementById('chatListContainer');
+        container.innerHTML = '';
+
+        let list = [...PrivexState.chats];
+
+        // Filter category
+        if (filterCat === 'direct') list = list.filter(c => c.type === 'direct');
+        else if (filterCat === 'groups') list = list.filter(c => c.type === 'private_group');
+        else if (filterCat === 'public') list = list.filter(c => c.type === 'public');
+
+        // Filter text
+        if (filterText) {
+          const q = filterText.toLowerCase();
+          list = list.filter(c => c.title.toLowerCase().includes(q) || (c.handle && c.handle.toLowerCase().includes(q)));
+        }
+
+        // Sort by last updated descending
+        list.sort((a, b) => (b.lastUpdated || 0) - (a.lastUpdated || 0));
+
+        if (list.length === 0) {
+          container.innerHTML = `
+            <div style="padding: 24px; text-align: center; color: var(--text-muted); font-size: 13px;">
+              No matching private conversations found.
+            </div>
+          `;
+          return;
+        }
+
+        list.forEach(chat => {
+          const row = document.createElement('div');
+          row.className = `chat-row ${chat.id === PrivexState.activeChatId ? 'active' : ''}`;
+          row.onclick = () => PrivexChat.selectChat(chat.id);
+
+          const lastMsgs = PrivexState.messages[chat.id] || [];
+          const lastMsg = lastMsgs[lastMsgs.length - 1];
+          const snippet = lastMsg ? lastMsg.text : (chat.description || 'Encrypted room');
+
+          row.innerHTML = `
+            <div class="avatar-wrapper">
+              <div class="avatar">${PrivexUI.escapeHtml(chat.avatarText)}</div>
+              <div class="status-dot ${chat.online ? '' : 'offline'}"></div>
+            </div>
+            <div class="chat-row-meta">
+              <div class="chat-row-header">
+                <span class="chat-row-name">
+                  ${PrivexUI.escapeHtml(chat.title)}
+                  ${chat.verified ? '<span class="badge-verified">✓</span>' : ''}
+                  ${chat.type === 'private_group' ? '<span class="badge-lock">🔒</span>' : ''}
+                </span>
+                <span class="chat-row-time">${chat.lastUpdated ? PrivexUI.formatTime(chat.lastUpdated) : ''}</span>
+              </div>
+              <div class="chat-row-preview">
+                <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">${PrivexUI.escapeHtml(snippet)}</span>
+                ${chat.unreadCount > 0 ? `<span class="unread-badge">${chat.unreadCount}</span>` : ''}
+              </div>
+            </div>
+          `;
+          container.appendChild(row);
+        });
+      },
+
+      renderSuggestedContacts() {
+        const container = document.getElementById('suggestedContactsList');
+        if (!container) return;
+        container.innerHTML = '';
+
+        PrivexState.mockUsers.forEach(u => {
+          const item = document.createElement('div');
+          item.style.cssText = 'display:flex; align-items:center; justify-content:space-between; padding:6px 8px; background:var(--bg-input); border-radius:var(--radius-sm); cursor:pointer;';
+          item.innerHTML = `
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="avatar" style="width:30px; height:30px; font-size:11px;">${u.avatarText}</div>
+              <div>
+                <div style="font-weight:600; font-size:13px;">${PrivexUI.escapeHtml(u.displayName)}</div>
+                <div style="font-size:11px; color:var(--accent);">${u.username}</div>
+              </div>
+            </div>
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;">Chat</button>
+          `;
+          item.onclick = () => {
+            document.getElementById('newChatUsernameInput').value = u.username;
+            PrivexChat.startDirectFromInput();
+          };
+          container.appendChild(item);
+        });
+      },
+
+      filterCategory(category, btn) {
+        document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const q = document.getElementById('chatSearchInput').value;
+        this.renderChatList(q, category);
+      },
+
+      handleSearch(val) {
+        const activePill = document.querySelector('.filter-pill.active');
+        const cat = activePill ? activePill.textContent.toLowerCase() : 'all';
+        this.renderChatList(val, cat);
+      },
+
+      switchView(viewName) {
+        PrivexState.currentView = viewName;
+        document.querySelectorAll('.rail-btn').forEach(b => b.classList.remove('active'));
+        const activeBtn = document.querySelector(`.rail-btn[data-view="${viewName}"]`);
+        if (activeBtn) activeBtn.classList.add('active');
+
+        const titleElem = document.getElementById('sidebarHeaderTitle');
+        if (viewName === 'chats') {
+          titleElem.textContent = 'Messages';
+          this.renderChatList();
+        } else if (viewName === 'discover') {
+          titleElem.textContent = 'Communities';
+          this.renderChatList('', 'public');
+        } else if (viewName === 'calls') {
+          titleElem.textContent = 'Calls Log';
+          document.getElementById('chatListContainer').innerHTML = `
+            <div style="padding: 24px; text-align: center; color: var(--text-muted); font-size: 13px;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:8px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <div>No missed encrypted voice sessions.</div>
+            </div>
+          `;
+        }
+      },
+
+      openSavedNotes() {
+        let savedChat = PrivexState.chats.find(c => c.id === 'chat_saved_notes');
+        if (!savedChat) {
+          savedChat = {
+            id: 'chat_saved_notes',
+            type: 'direct',
+            targetUserId: 'usr_me',
+            title: 'Encrypted Vault & Saved Notes',
+            handle: '@notes_vault',
+            avatarText: 'SV',
+            online: true,
+            unreadCount: 0,
+            lastUpdated: Date.now(),
+            pinnedId: null,
+            verified: false
+          };
+          PrivexState.chats.push(savedChat);
+          PrivexState.messages['chat_saved_notes'] = [
+            {
+              id: 'm_s_init',
+              senderId: 'usr_me',
+              senderName: 'Vault',
+              text: 'Welcome to your private vault. Notes saved here are client-isolated.',
+              timestamp: Date.now(),
+              status: 'read'
+            }
+          ];
+          saveStateToDisk();
+        }
+        PrivexChat.selectChat('chat_saved_notes');
+      },
+
+      toggleInfoPanel() {
+        const panel = document.getElementById('infoPanel');
+        panel.classList.toggle('collapsed');
+
+        if (!panel.classList.contains('collapsed') && PrivexState.activeChatId) {
+          const chat = PrivexState.chats.find(c => c.id === PrivexState.activeChatId);
+          if (!chat) return;
+
+          document.getElementById('infoHeroAvatar').textContent = chat.avatarText;
+          document.getElementById('infoHeroName').textContent = chat.title;
+          document.getElementById('infoHeroUsername').textContent = chat.handle || '@handle';
+          document.getElementById('infoHeroBio').textContent = chat.description || 'Private end-to-end conversation on PRIVEX.';
+
+          const membersSec = document.getElementById('infoMembersSection');
+          if (chat.type !== 'direct') {
+            membersSec.style.display = 'block';
+            document.getElementById('infoMembersTitle').textContent = `Group Members (${chat.members ? chat.members.length : 1})`;
+            document.getElementById('infoMembersList').innerHTML = `
+              <div style="font-size: 12.5px; display:flex; justify-content:space-between; align-items:center;">
+                <span>Niyaz Ibtada (You)</span>
+                <span style="color:var(--accent); font-size:10px; font-weight:700;">OWNER</span>
+              </div>
+              <div style="font-size: 12.5px; display:flex; justify-content:space-between; align-items:center;">
+                <span>Alex Mercer</span>
+                <span style="color:var(--text-muted); font-size:10px;">ADMIN</span>
+              </div>
+            `;
+          } else {
+            membersSec.style.display = 'none';
+          }
+        }
+      },
+
+      closeMobileChat() {
+        document.getElementById('chatWorkspace').classList.remove('mobile-active');
+      },
+
+      handleGroupTypeToggle(val) {
+        document.getElementById('groupHandleWrap').style.display = (val === 'public') ? 'flex' : 'none';
+      },
+
+      toggleTheme() {
+        const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+        const next = cur === 'dark' ? 'light' : 'dark';
+        this.applyTheme(next);
+      },
+
+      applyTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        PrivexState.theme = t;
+        PrivexStorage.set('theme', t);
+      },
+
+      openModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.add('open');
+      },
+
+      closeModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.remove('open');
+      },
+
+      openReportModal() {
+        this.openModal('reportModal');
+      },
+
+      submitReport() {
+        const reason = document.getElementById('reportReasonSelect').value;
+        this.closeModal('reportModal');
+        PrivexToast.show(`Report submitted under [${reason.toUpperCase()}]. We will investigate safely.`, 'success');
+      },
+
+      muteCurrentChat() {
+        PrivexToast.show('Conversation notifications muted', 'info');
+      },
+
+      blockCurrentContact() {
+        PrivexToast.show('User blocked. Communications rejected at gateway.', 'error');
+      },
+
+      viewRecoveryCodes() {
+        alert("PRIVEX EMERGENCY RECOVERY CODES (Zero-Phone):\n\n1. vapor\n2. matrix\n3. shield\n4. cipher\n5. orbit\n6. obsidian\n7. kinetic\n8. vault\n\nStore these offline. Losing your password and recovery codes permanently terminates account access.");
+      },
+
+      promptAccountDeletion() {
+        const conf = confirm("PERMANENT DATA ERASURE WARNING:\n\nThis will completely purge your local keys, message threads, identity credentials, and sandbox state. In production, this issues a cryptographic shred request to server nodes.\n\nAre you sure you wish to proceed?");
+        if (conf) {
+          PrivexStorage.wipeAllData();
+          alert("PRIVEX local state erased. Re-initializing blank instance.");
+          window.location.reload();
+        }
+      },
+
+      promptSearchMessages() {
+        const query = prompt("Search within current conversation:");
+        if (!query) return;
+        const msgs = PrivexState.messages[PrivexState.activeChatId] || [];
+        const matches = msgs.filter(m => m.text.toLowerCase().includes(query.toLowerCase()));
+        PrivexToast.show(`Found ${matches.length} message(s) containing "${query}"`, 'info');
+      },
+
+      escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>'"]/g, tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag));
+      },
+
+      formatTime(ts) {
+        const d = new Date(ts);
+        return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+    };
+
+    // Close modal when tapping on dark backdrop
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) backdrop.classList.remove('open');
+      });
+    });
+
+    // Boot the application on load
+    window.addEventListener('DOMContentLoaded', () => {
+      PrivexUI.init();
+    });
+  </script>
+</body>
+</html>
